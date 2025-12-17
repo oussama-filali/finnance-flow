@@ -34,6 +34,7 @@ CREATE TABLE transactions (
     location VARCHAR(255),
     category_id INT,
     subcategory_id INT,
+    subcategory_text VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL,

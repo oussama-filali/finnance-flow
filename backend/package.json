@@ -1,0 +1,10 @@
+{
+	"name": "finnance-flow-backend",
+	"private": true,
+	"version": "0.1.0",
+	"description": "Scripts de démarrage backend PHP",
+	"scripts": {
+		"start": "php -S 127.0.0.1:8000 index.php",
+		"start:8080": "php -S 127.0.0.1:8080 index.php"
+	}
+}

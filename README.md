@@ -4,20 +4,28 @@
 FinanceFlow est une application full-stack de gestion budgétaire développée avec React (frontend) et PHP/MariaDB (backend). Elle permet d'ajouter, qualifier, afficher et filtrer des transactions, avec visualisation graphique. Intégration expérimentale d'un "langage harmonique" inspiré de φ (nombre d'or) et Fibonacci pour des comportements UI dynamiques.
 
 ## Fonctionnalités
-- Ajout/édition/suppression de transactions (date, lieu, titre, description, catégorie/sous-catégorie)
-- Affichage liste transactions avec tri/filtres (catégorie, date, montant)
-- Calcul et affichage du solde restant
-- Dashboard avec graphiques (Chart.js) : historique, répartition
-- Responsive mobile-first (Tailwind CSS)
-- Authentification basique (sessions PHP)
-- Partage de transactions (optionnel)
-- Règles harmoniques via `main.harm` et interpréteur JS (proportions φ, animations Fibonacci)
+- ✅ Ajout/édition/suppression de transactions (date, lieu, titre, description, catégorie/sous-catégorie)
+- ✅ **Import CSV/PDF/Images** avec détection automatique de format
+- ✅ **Import texte** pour relevés bancaires
+- ✅ **Catégorisation automatique** par mots-clés (IA basique)
+- ✅ Affichage liste transactions avec tri/filtres avancés (catégorie, date, montant, recherche)
+- ✅ Calcul et affichage du solde restant
+- ✅ Dashboard avec graphiques (Chart.js) : historique, répartition
+- ✅ **Design UI/UX moderne** : gradients, animations, effets visuels
+- ✅ Responsive mobile-first (Tailwind CSS)
+- ✅ Authentification basique (sessions PHP)
+- ✅ Partage de transactions (optionnel)
+
+## Formats d'Import Supportés
+- **CSV** : Format standard avec colonnes Date, Title, Amount, Location
+- **PDF** : Relevés bancaires au format PDF
+- **Images** : PNG, JPG, JPEG (extraction de texte)
+- **Texte** : Copier-coller de relevés bancaires
 
 ## Architecture
-- **Frontend** : React + Vite, mobile-first, Tailwind
-- **Backend** : PHP MVC simple, API REST (PDO, prepared statements)
+- **Frontend** : Vanilla JavaScript (ES6 modules), Vite, Tailwind CSS
+- **Backend** : PHP 7.4+ MVC, API REST (PDO, prepared statements)
 - **Base** : MariaDB (schema relationnel)
-- **Expérimental** : `main.harm` (règles), mini-interpréteur JS
 
 ## Installation
 1. Cloner le repo : `git clone https://github.com/prenom-nom/finance-flow.git`
@@ -43,15 +51,10 @@ FinanceFlow est une application full-stack de gestion budgétaire développée a
 4. DB : Importer schema sur MariaDB Plesk
 5. Env vars : Configurer dans Plesk
 
-## Présentation
-Slides PDF : `docs/presentation.pdf` (à créer)
-
 ## Sécurité
-- Prepared statements PDO
-- Validation input
-- Sessions pour auth
-- Pas d'infos sensibles dans repo
-
-## Langage Harmonique
-- `main.harm` : Règles (ex. : `phi_ratio: 1.618; fib_anim: sequence(5);`)
-- Interpréteur JS : Applique proportions CSS, animations côté client
+- Prepared statements PDO (protection SQL injection)
+- Validation des données côté serveur
+- Sessions sécurisées (httponly, samesite)
+- Headers de sécurité HTTP (X-Frame-Options, CSP, etc.)
+- Upload de fichiers avec validation MIME stricte
+- Rate limiting sur les connexions (recommandé en production)

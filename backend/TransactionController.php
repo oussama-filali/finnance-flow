@@ -33,14 +33,25 @@ class TransactionController {
     }
 
     public function store() {
-        $data = json_decode(file_get_contents('php://input'), true);
-        if (!$data || !isset($data['title'], $data['amount'], $data['date'])) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Données invalides']);
-            return;
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+            if (!$data || !isset($data['title'], $data['amount'], $data['date'])) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Données invalides']);
+                return;
+            }
+            
+            // Convertir category_id vide en NULL
+            if (isset($data['category_id']) && $data['category_id'] === '') {
+                $data['category_id'] = null;
+            }
+            
+            $id = $this->model->create($data, $this->userId);
+            echo json_encode(['id' => $id, 'message' => 'Transaction créée']);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['error' => $e->getMessage()]);
         }
-        $id = $this->model->create($data, $this->userId);
-        echo json_encode(['id' => $id, 'message' => 'Transaction créée']);
     }
 
     public function update($id) {
@@ -50,13 +61,23 @@ class TransactionController {
             echo json_encode(['error' => 'Données invalides']);
             return;
         }
-        $updated = $this->model->update($id, $data, $this->userId);
-        if ($updated) {
-            echo json_encode(['message' => 'Transaction mise à jour']);
-        } else {
+
+        // Vérifier si la transaction existe et appartient à l'utilisateur
+        $existing = $this->model->getById($id, $this->userId);
+        if (!$existing) {
             http_response_code(404);
             echo json_encode(['error' => 'Transaction non trouvée']);
+            return;
         }
+
+        // Convertir category_id vide en NULL
+        if (isset($data['category_id']) && $data['category_id'] === '') {
+            $data['category_id'] = null;
+        }
+
+        $this->model->update($id, $data, $this->userId);
+        // On retourne succès même si rowCount est 0 (pas de changement)
+        echo json_encode(['message' => 'Transaction mise à jour']);
     }
 
     public function destroy($id) {

@@ -3,27 +3,94 @@
 @tailwind utilities;
 
 @layer base {
-  * {
-    font-family: 'Inter', sans-serif;
+  :root {
+    color-scheme: dark;
   }
-  
+
+  html,
   body {
-    @apply bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50;
+    height: 100%;
+  }
+
+  body {
+    @apply bg-ink-900 text-slate-100 antialiased;
+    background:
+      radial-gradient(1200px 700px at 20% 10%, rgba(99, 102, 241, 0.18), transparent 55%),
+      radial-gradient(900px 600px at 80% 25%, rgba(34, 211, 238, 0.14), transparent 60%),
+      radial-gradient(900px 600px at 40% 90%, rgba(167, 139, 250, 0.10), transparent 60%),
+      linear-gradient(135deg, #0f172a 0%, #1e293b 55%, #6366f1 130%);
+  }
+
+  ::selection {
+    background: rgba(34, 211, 238, 0.28);
+  }
+
+  a {
+    @apply text-neon-cyan hover:text-neon-aqua;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgba(34, 211, 238, 0.75);
+    outline-offset: 2px;
   }
 }
 
 @layer components {
-  .glass {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+  .fx-scanlines {
+    background-image: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.06) 0px,
+      rgba(255, 255, 255, 0.00) 1px
+    );
+    background-size: 100% 6px;
   }
-  
-  .glass-dark {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+
+  .glass {
+    background: rgba(15, 23, 42, 0.45);
+    border: 1px solid rgba(99, 102, 241, 0.22);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .glass-strong {
+    background: rgba(11, 16, 32, 0.62);
+    border: 1px solid rgba(34, 211, 238, 0.22);
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12), 0 20px 70px rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  .neon-border {
+    border: 1px solid rgba(34, 211, 238, 0.25);
+    box-shadow:
+      0 0 0 1px rgba(34, 211, 238, 0.12),
+      0 0 28px rgba(34, 211, 238, 0.22),
+      0 0 90px rgba(99, 102, 241, 0.12);
+  }
+
+  .holo-text {
+    background: linear-gradient(90deg, rgba(34, 211, 238, 0.95), rgba(167, 139, 250, 0.95));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .btn-neon {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-medium;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.16), rgba(99, 102, 241, 0.14));
+    border: 1px solid rgba(34, 211, 238, 0.26);
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.10), 0 10px 30px rgba(0, 0, 0, 0.35);
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  }
+
+  .btn-neon:hover {
+    transform: translate3d(0, -1px, 0);
+    border-color: rgba(167, 139, 250, 0.32);
+    box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.14), 0 0 28px rgba(34, 211, 238, 0.26), 0 18px 45px rgba(0, 0, 0, 0.45);
+  }
+
+  .btn-neon:active {
+    transform: translate3d(0, 0px, 0);
   }
 }

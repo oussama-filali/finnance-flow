@@ -6,16 +6,16 @@ USE financeflow;
 INSERT INTO users (username, password_hash) VALUES
 ('testuser', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'); -- password: "password"
 
--- Catégories principales
+-- Catégories principales (NULL = global pour tous)
 INSERT INTO categories (name, user_id) VALUES
-('Logement', 1),
-('Services', 1),
-('Alimentation et épicerie', 1),
-('Transport', 1),
-('Soins de santé', 1),
-('Service de garde et éducation', 1),
-('Soins personnels et mieux-être', 1),
-('Remboursement des dettes', 1);
+('alimentation', NULL),
+('restaurant', NULL),
+('transport', NULL),
+('loisirs', NULL),
+('sante', NULL),
+('logement', NULL),
+('shopping', NULL),
+('banque', NULL);
 
 -- Sous-catégories pour Logement (id=1)
 INSERT INTO subcategories (name, category_id) VALUES

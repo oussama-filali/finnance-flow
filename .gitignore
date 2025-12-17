@@ -10,3 +10,4 @@ backend/vendor/
 backend/logs/
 *.sqlite
 *.db
+.sql

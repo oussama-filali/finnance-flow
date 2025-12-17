@@ -1,0 +1,14 @@
+{
+    "name": "finnance-flow/backend",
+    "description": "Backend API pour FinanceFlow",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "smalot/pdfparser": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "FinanceFlow\\": "src/"
+        }
+    }
+}

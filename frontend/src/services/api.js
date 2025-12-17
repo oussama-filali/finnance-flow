@@ -1,55 +1,48 @@
-import axios from 'axios'
+// services/api.js - Configuration et requêtes API de base
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const DEFAULT_API_BASE = "http://localhost:8000";
 
-const client = axios.create({
-  baseURL: API_URL,
-  withCredentials: true,
-  headers: { 'Content-Type': 'application/json' }
-})
+export function getApiBase() {
+  const envBase = (import.meta?.env?.VITE_API_BASE || "").trim();
+  return envBase || DEFAULT_API_BASE;
+}
 
-client.interceptors.response.use(
-  response => response,
-  error => {
-    if (error.response?.status === 401) {
-      // Only redirect if not already on login/register pages to avoid loops
-      if (!window.location.pathname.match(/^\/(login|register)/)) {
-        window.location.href = '/login'
-      }
-    }
-    return Promise.reject(error)
+export function apiUrl(path) {
+  const base = getApiBase().replace(/\/$/, "");
+  const clean = String(path || "").replace(/^\//, "");
+  return `${base}/${clean}`;
+}
+
+export async function apiRequest(path, { method = "GET", json, formData } = {}) {
+  const headers = {};
+  let body;
+
+  if (formData) {
+    body = formData;
+  } else if (json !== undefined) {
+    headers["Content-Type"] = "application/json";
+    body = JSON.stringify(json);
   }
-)
 
-export const authAPI = {
-  login: (credentials) => client.post('/Auth/Login.php', credentials),
-  register: (userData) => client.post('/Auth/Register.php', userData),
-  logout: () => client.post('/Auth/Logout.php'),
+  const res = await fetch(apiUrl(path), {
+    method,
+    headers,
+    body,
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    let msg = `Erreur HTTP ${res.status}`;
+    try {
+      const data = await res.json();
+      if (data.error) msg = data.error;
+    } catch {}
+    throw new Error(msg);
+  }
+
+  const contentType = res.headers.get("content-type") || "";
+  if (contentType.includes("application/json")) {
+    return await res.json();
+  }
+  return await res.text();
 }
-
-export const transactionAPI = {
-  getAll: () => client.get('/transactions'),
-  getById: (id) => client.get(`/transactions/${id}`),
-  create: (data) => client.post('/transactions', data),
-  update: (id, data) => client.put(`/transactions/${id}`, data),
-  delete: (id) => client.delete(`/transactions/${id}`),
-  getBalance: () => client.get('/transactions/balance'),
-}
-
-export const categoryAPI = {
-  getAll: () => client.get('/categories'),
-  getSubcategories: (categoryId) => client.get(`/categories/${categoryId}/subcategories`),
-}
-
-export const importAPI = {
-  uploadTransactions: (file) => {
-    const form = new FormData()
-    form.append('file', file)
-    return client.post('/import/transactions', form, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
-  },
-  importText: (text) => client.post('/import/text', { text }),
-}
-
-export default client

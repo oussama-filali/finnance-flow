@@ -24,15 +24,51 @@ class TransactionModel {
     }
 
     public function create($data, $userId) {
-        $stmt = $this->pdo->prepare("INSERT INTO transactions (user_id, title, description, amount, date, location, category_id, subcategory_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$userId, $data['title'], $data['description'] ?? null, $data['amount'], $data['date'], $data['location'] ?? null, $data['category_id'] ?? null, $data['subcategory_id'] ?? null]);
-        return $this->pdo->lastInsertId();
+        try {
+            error_log("TransactionModel::create appelé - User: $userId, Titre: " . ($data['title'] ?? 'N/A'));
+            
+            $stmt = $this->pdo->prepare("INSERT INTO transactions (user_id, title, description, amount, date, location, category_id, subcategory_text) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $result = $stmt->execute([
+                $userId, 
+                $data['title'], 
+                $data['description'] ?? null, 
+                floatval($data['amount']), 
+                $data['date'], 
+                $data['location'] ?? null, 
+                $data['category_id'] ?? null, 
+                $data['subcategory_text'] ?? null
+            ]);
+            
+            $insertId = $this->pdo->lastInsertId();
+            error_log("TransactionModel::create réussi - ID: $insertId");
+            
+            return $insertId;
+        } catch (PDOException $e) {
+            error_log("Transaction create error: " . $e->getMessage());
+            error_log("Data: " . json_encode($data));
+            throw $e;
+        }
     }
 
     public function update($id, $data, $userId) {
-        $stmt = $this->pdo->prepare("UPDATE transactions SET title = ?, description = ?, amount = ?, date = ?, location = ?, category_id = ?, subcategory_id = ? WHERE id = ? AND user_id = ?");
-        $stmt->execute([$data['title'], $data['description'] ?? null, $data['amount'], $data['date'], $data['location'] ?? null, $data['category_id'] ?? null, $data['subcategory_id'] ?? null, $id, $userId]);
-        return $stmt->rowCount();
+        try {
+            $stmt = $this->pdo->prepare("UPDATE transactions SET title = ?, description = ?, amount = ?, date = ?, location = ?, category_id = ?, subcategory_text = ? WHERE id = ? AND user_id = ?");
+            $stmt->execute([
+                $data['title'], 
+                $data['description'] ?? null, 
+                floatval($data['amount']), 
+                $data['date'], 
+                $data['location'] ?? null, 
+                $data['category_id'] ?? null, 
+                $data['subcategory_text'] ?? null, 
+                $id, 
+                $userId
+            ]);
+            return $stmt->rowCount();
+        } catch (PDOException $e) {
+            error_log("Transaction update error: " . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function delete($id, $userId) {

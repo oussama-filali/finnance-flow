@@ -13,6 +13,12 @@ try {
     die("Erreur DB: " . $e->getMessage());
 }
 
+// Configuration session pour CORS
+ini_set('session.cookie_samesite', 'Lax');
+ini_set('session.cookie_httponly', 'true');
+
 // Démarrer session pour auth
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
