@@ -12,7 +12,7 @@ FinanceFlow est une application full-stack de gestion budgétaire développée a
 - ✅ Calcul et affichage du solde restant
 - ✅ Dashboard avec graphiques (Chart.js) : historique, répartition
 - ✅ **Design UI/UX moderne** : gradients, animations, effets visuels
-- ✅ Responsive mobile-first (Tailwind CSS)
+- ✅ Interface responsive (Tailwind CSS)
 - ✅ Authentification basique (sessions PHP)
 - ✅ Partage de transactions (optionnel)
 
