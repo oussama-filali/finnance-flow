@@ -1,4 +1,4 @@
-# FinanceFlow : Gestionnaire de Budget Harmonique
+# FinanceFlow : Gestionnaire de Budget
 
 ## Description
 FinanceFlow est une application full-stack de gestion budgétaire développée avec React (frontend) et PHP/MariaDB (backend). Elle permet d'ajouter, qualifier, afficher et filtrer des transactions, avec visualisation graphique. Intégration expérimentale d'un "langage harmonique" inspiré de φ (nombre d'or) et Fibonacci pour des comportements UI dynamiques.
