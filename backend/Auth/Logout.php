@@ -1,9 +1,4 @@
 <?php
-// Empêche le warning "session already started"
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 session_unset();
 session_destroy();
 

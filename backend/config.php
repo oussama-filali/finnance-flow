@@ -1,6 +1,9 @@
 <?php
 // config.php - Configuration DB et app
 
+error_reporting(0);
+ini_set('display_errors', '0');
+
 $host = getenv('DB_HOST') ?: 'localhost';
 $dbname = getenv('DB_NAME') ?: 'financeflow';
 $user = getenv('DB_USER') ?: 'root';
@@ -21,4 +24,3 @@ ini_set('session.cookie_httponly', 'true');
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-?>

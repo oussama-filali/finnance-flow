@@ -84,4 +84,3 @@ class TransactionModel {
         return $result['balance'] ?? 0;
     }
 }
-?>

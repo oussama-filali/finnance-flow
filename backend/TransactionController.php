@@ -8,21 +8,25 @@ class TransactionController {
 
     public function __construct() {
         $this->model = new TransactionModel();
-        // Auth basique : vérifier session user_id
-        if (!isset($_SESSION['user_id'])) {
+        $this->userId = $_SESSION['user_id'] ?? null;
+    }
+    
+    private function checkAuth() {
+        if (!$this->userId) {
             http_response_code(401);
             echo json_encode(['error' => 'Non autorisé']);
             exit;
         }
-        $this->userId = $_SESSION['user_id'];
     }
 
     public function index() {
+        $this->checkAuth();
         $transactions = $this->model->getAll($this->userId);
         echo json_encode($transactions);
     }
 
     public function show($id) {
+        $this->checkAuth();
         $transaction = $this->model->getById($id, $this->userId);
         if ($transaction) {
             echo json_encode($transaction);
@@ -33,6 +37,7 @@ class TransactionController {
     }
 
     public function store() {
+        $this->checkAuth();
         try {
             $data = json_decode(file_get_contents('php://input'), true);
             if (!$data || !isset($data['title'], $data['amount'], $data['date'])) {
@@ -55,6 +60,7 @@ class TransactionController {
     }
 
     public function update($id) {
+        $this->checkAuth();
         $data = json_decode(file_get_contents('php://input'), true);
         if (!$data || !isset($data['title'], $data['amount'], $data['date'])) {
             http_response_code(400);
@@ -81,6 +87,7 @@ class TransactionController {
     }
 
     public function destroy($id) {
+        $this->checkAuth();
         $deleted = $this->model->delete($id, $this->userId);
         if ($deleted) {
             echo json_encode(['message' => 'Transaction supprimée']);
@@ -91,8 +98,8 @@ class TransactionController {
     }
 
     public function balance() {
+        $this->checkAuth();
         $balance = $this->model->getBalance($this->userId);
         echo json_encode(['balance' => $balance]);
     }
 }
-?>

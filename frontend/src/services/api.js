@@ -31,16 +31,19 @@ export async function apiRequest(path, { method = "GET", json, formData } = {}) 
     credentials: "include",
   });
 
+  const contentType = res.headers.get("content-type") || "";
+  
   if (!res.ok) {
     let msg = `Erreur HTTP ${res.status}`;
     try {
-      const data = await res.json();
-      if (data.error) msg = data.error;
+      if (contentType.includes("application/json")) {
+        const data = await res.json();
+        if (data.error) msg = data.error;
+      }
     } catch {}
     throw new Error(msg);
   }
 
-  const contentType = res.headers.get("content-type") || "";
   if (contentType.includes("application/json")) {
     return await res.json();
   }

@@ -7,9 +7,13 @@ export async function renderDashboardView() {
   let balance = 0;
   try {
     const data = await getBalance();
-    balance = Number(data.balance) || 0;
+    if (data && typeof data.balance !== 'undefined') {
+      balance = Number(data.balance) || 0;
+    }
   } catch (err) {
     console.error("Erreur chargement balance:", err);
+    // Ne pas planter si pas connecté
+    balance = 0;
   }
 
   const balanceClass = balance >= 0 ? "text-green-400" : "text-red-400";

@@ -43,12 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || php_sapi_name() === 'cli') {
     
     if ($stmt->execute([$username, $passwordHash])) {
         $userId = $pdo->lastInsertId();
-        
-        // Empêche le warning "session already started"
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        
         $_SESSION['user_id'] = $userId;
         $user = ['id' => $userId, 'username' => $username];
         echo json_encode(['success' => true, 'message' => 'Compte créé avec succès', 'user' => $user]);
@@ -60,4 +54,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || php_sapi_name() === 'cli') {
     http_response_code(405);
     echo json_encode(['error' => 'Méthode non autorisée']);
 }
-?>

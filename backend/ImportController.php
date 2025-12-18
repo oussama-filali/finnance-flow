@@ -149,7 +149,7 @@ class ImportController {
         
         // Solution avec smalot/pdfparser
         if (file_exists(__DIR__ . '/vendor/autoload.php')) {
-            require_once __DIR__ . '/vendor/autoload.php';
+            @require_once __DIR__ . '/vendor/autoload.php';
             
             try {
                 $parser = new \Smalot\PdfParser\Parser();
@@ -238,8 +238,8 @@ class ImportController {
                     $nextLine = trim($lines[$i]);
                     
                     // Si on trouve un montant, c'est la fin de cette transaction
-                    if (preg_match('/^([\+\-])\s*(\d+[,\.]\d{2})\s*EUR$/i', $nextLine, $amountMatch)) {
-                        $sign = $amountMatch[1];
+                    if (preg_match('/^([\+\-])?\s*(\d+[,\.]\d{1,2})\s*EUR$/i', $nextLine, $amountMatch)) {
+                        $sign = $amountMatch[1] ?? '+';
                         $amountStr = str_replace(',', '.', $amountMatch[2]);
                         $amount = floatval($amountStr) * ($sign === '-' ? -1 : 1);
                         $i++;
@@ -362,4 +362,3 @@ class ImportController {
         return substr($date, 0, 10);
     }
 }
-?>
